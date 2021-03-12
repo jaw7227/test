@@ -1,45 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long int
+#define all(x) x.begin(), x.end()
 #define watch(x) cout << (#x) << " is " << (x) << endl
 #define MOD 1000000007
 
-int matrix[6][6];
+void dfs(int s, vector<int> adj[],bool vis[]){
 
-int getRem(int x,int y,int n,int m){
-  int count = 0;
-  for(int i = 0 ; i < n; i++){
-    for(int j = 0; j < m ; j++){
-      if(x&(1<<i) || y&(1<<j))
-        continue;
-      count+=matrix[i][j];
-    }
-  }
-  return count;
+	cout << s <<" ";
+	vis[s] = 1;
+	for(auto x: adj[s]){
+		if(!vis[x])
+			dfs(x,adj,vis);
+	}
 }
 
 
 void solve(int T)
 {
+	int n;
+	cin >> n;
+	vector<int> adj[n+1];
 
-  int n,m,k;
-  cin>> n >> m >> k;
+	for(int  i = 0 ; i < n ;i++)
+	{	int x,y;
+		cin >> x >> y;
+		adj[x].push_back(y);
+		adj[y].push_back(x);
+	}
+	bool vis[n+1];
+	for(int  i = 0 ; i <=n ;i++)vis[i] = false;
 
-  for(int i=0;i < n; i++){
-    string s; cin >> s;
-    for(int j = 0 ; j < m ; j++)
-      matrix[i][j] = (s[j]=='.'?0:1);
-  }
-  int ans = 0;
-  for(int i=0; i < (1<<n); i++){
-    for(int j=0; j <  (1<<m); j++){
-      int rem = getRem(i,j,n,m);
-      if(rem == k)
-        ans++;
-    }
-  }
-
-  cout << ans << endl;
+	dfs(1ll,adj,vis);
+	cout << endl;
 }
 
 int32_t main()
